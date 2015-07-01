@@ -117,7 +117,7 @@ void render(num time) {
         if(diff > 2 && diff_sum > SECTOR_THRESHOLD) {
           s.roundTime = diff;
           notifyNewTime(diff);
-          document.querySelector('#times').text += "${diff.toStringAsFixed(3)} sec\n";
+          document.querySelector('#times').text = "${diff.toStringAsFixed(3)} sec\n" + document.querySelector('#times').text;
           s.startTime = null;
         }
       }
@@ -145,9 +145,9 @@ void render(num time) {
   if(notifyText != null) {
     notifyTextSize--;
     
-    
     ctx.save();
     ctx.font = '${notifyTextSize}px Arial';
+    ctx.textBaseline = 'middle';
     ctx.fillStyle = 'white';
     ctx.fillText(notifyText, canvas.width/2 - ctx.measureText(notifyText).width/2, canvas.height/2);
     ctx.restore();
