@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="scaffolded-by" content="https://github.com/google/stagehand">
+      <title>Sektorzeit für unser Fahrzeug</title>
+      <link rel="stylesheet" href="styles/main.css">
+  </head>
+  
+  <body>
+    <!--  <video controls>
+          <source src="www.youtube.com/watch?v=xX-P-RVgwXw" type="video/mp4"></source>
+      </video>
+      -->
+
+    <!--<iframe id="iframe" width="640" height="480" src="https://www.youtube.com/embed/xX-P-RVgwXw" frameborder="0" allowfullscreen></iframe>-->
+    
+    <div id="container">
+      <button id="btn-play">Play</button>
+      <button id="btn-create-sector">Create new sector</button>
+      <button id="btn-load-webcam">Load webcam video</button>
+    
+      <h1>Sectors</h1>
+    
+      <table>
+        <thead>
+          <tr>
+            <th>Sector</th>
+            <th>Neutral Color Average</th>
+            <th>Set current state as neutral average</th>
+          </tr>
+        </thead>
+        <tbody id="sectors">
+          
+        </tbody>
+      </table>
+      
+      <canvas id="canvas" width="640" height="360"></canvas>
+    
+      <h1>Round times</h1>
+      
+      <textarea id="times"></textarea>
+      
+      <h1>How to use</h1>
+      
+      <ol>
+        <li>Click 'create new sector'</li>
+        <li>Click once to select top/left corner</li>
+        <li>Move mouse to visualize the sector</li>
+        <li>Click once to select bottom/right corner</li>
+        <li>If the sector is fine, click 'YES'</li>
+        <li>Click 'Get average color' if no car is inside the sector</li>
+        <li>Create as many sectors as you want and click 'play'</li>
+      </ol>
+      
+      <video id="video" width="640" height="360" style="visibility: hidden;">
+        <source type="video/webm" src="6.53_640.webm"></source>
+        <source type="video/mp4" src="6.53_640.mp4"></source>
+      </video>
+    </div>
+  
+    <script type="application/dart" src="main.dart"></script>
+    <script data-pub-inline src="packages/browser/dart.js"></script>
+  </body>
+</html>
