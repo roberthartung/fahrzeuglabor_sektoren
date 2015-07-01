@@ -15,6 +15,8 @@ ButtonElement loadWebcamButton = document.querySelector('#btn-load-webcam');
 Point newSectorBegin;
 Point newSectorEnd;
 List<Sector> sectors = [];
+String notifyText = null;
+num notifyTextSize;
 
 class Color {
   final num r, g, b;
@@ -71,6 +73,11 @@ class Sector {
 
 const int SECTOR_THRESHOLD = 15;
 
+void notifyNewTime(num time) {
+  notifyText = time.toStringAsFixed(3);
+  notifyTextSize = 100;
+}
+
 void render(num time) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(video, 0, 0);
@@ -109,6 +116,7 @@ void render(num time) {
         // THRESH
         if(diff > 2 && diff_sum > SECTOR_THRESHOLD) {
           s.roundTime = diff;
+          notifyNewTime(diff);
           document.querySelector('#times').text += "${diff.toStringAsFixed(3)} sec\n";
           s.startTime = null;
         }
@@ -134,6 +142,21 @@ void render(num time) {
     ctx.stroke();
   }
   
+  if(notifyText != null) {
+    notifyTextSize--;
+    
+    
+    ctx.save();
+    ctx.font = '${notifyTextSize}px Arial';
+    ctx.fillStyle = 'white';
+    ctx.fillText(notifyText, canvas.width/2 - ctx.measureText(notifyText).width/2, canvas.height/2);
+    ctx.restore();
+    
+    if(notifyTextSize == 0) {
+      notifyText = null;
+    }
+  }
+  
   window.animationFrame.then(render);
 }
 
@@ -141,23 +164,23 @@ void main() {
   createSectorButton.onClick.listen((MouseEvent ev) {
     createSectorButton.disabled = true;
     StreamSubscription sub;
-    canvas.onClick.first.then((MouseEvent ev) {
+    canvas.onMouseDown.first.then((MouseEvent ev) {
       newSectorBegin = ev.offset;
       sub = canvas.onMouseMove.listen((MouseEvent ev) {
         newSectorEnd = ev.offset;
       });
-    });
-    canvas.onClick.elementAt(1).then((MouseEvent ev) {
-      newSectorEnd = ev.offset;
-      if(window.confirm('Save sector?')) {
-        Rectangle r;
-        r = new Rectangle(min(newSectorBegin.x, newSectorEnd.x), min(newSectorBegin.y, newSectorEnd.y), (newSectorEnd.x - newSectorBegin.x).abs(), (newSectorEnd.y - newSectorBegin.y).abs());
-        sectors.add(new Sector(r));
-      }
-      newSectorBegin = null;
-      newSectorEnd = null;
-      sub.cancel();
-      createSectorButton.disabled = false;
+      document.onMouseUp.first.then((MouseEvent ev) {
+        newSectorEnd = ev.offset;
+        if(window.confirm('Save sector?')) {
+          Rectangle r;
+          r = new Rectangle(min(newSectorBegin.x, newSectorEnd.x), min(newSectorBegin.y, newSectorEnd.y), (newSectorEnd.x - newSectorBegin.x).abs(), (newSectorEnd.y - newSectorBegin.y).abs());
+          sectors.add(new Sector(r));
+        }
+        newSectorBegin = null;
+        newSectorEnd = null;
+        sub.cancel();
+        createSectorButton.disabled = false;
+      });
     });
   });
   
